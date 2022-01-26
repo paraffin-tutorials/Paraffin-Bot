@@ -17,7 +17,9 @@
   },
   "homepage": "https://github.com/paraffin-tutorials-org/Paraffin-Bot#readme",
   "dependencies": {
+    "@discordjs/rest": "^0.3.0",
     "@discordjs/voice": "^0.8.0",
-    "discord.js": "^13.6.0"
+    "discord.js": "^13.6.0",
+    "fs": "^0.0.1-security"
   }
 }

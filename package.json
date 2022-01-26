@@ -1,0 +1,23 @@
+{
+  "name": "paraffin-bot",
+  "version": "1.0.0",
+  "description": "paraffin discord bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paraffin-tutorials-org/Paraffin-Bot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/paraffin-tutorials-org/Paraffin-Bot/issues"
+  },
+  "homepage": "https://github.com/paraffin-tutorials-org/Paraffin-Bot#readme",
+  "dependencies": {
+    "@discordjs/voice": "^0.8.0",
+    "discord.js": "^13.6.0"
+  }
+}

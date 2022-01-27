@@ -6,10 +6,11 @@ module.exports =
     {
         name: 'guildDelete',
 
-        execute(Guild)
+        execute(Guild, Client)
         {
             const Embed = new MessageEmbed()
-                .setDescription(`***Left from a Server***\n\n**Server Name:** ${Guild.name}\n **Server ID:** ${Guild.id}\n **Members Count:** ${Guild.memberCount}`)
+                .setTitle(`Left from a Server`)
+                .setDescription(`**Server Name:** ${Guild.name}\n **Server ID:** ${Guild.id}\n **Members Count:** ${Guild.memberCount}`)
                 .setColor("#e92e2e");
 
             const Webhook = new WebhookClient({ url: process.env.GUILD_EVENT_WEBHOOK });

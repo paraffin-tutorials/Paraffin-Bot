@@ -11,6 +11,6 @@ module.exports =
             Client.user.setActivity('Paraffin Tutorials', { type: 'COMPETING' });
              
             Logger.info(`Bot is Logged in as ${Client.user.tag}!`);
-            servercount(client)
+            servercount(Client)
         },
     };

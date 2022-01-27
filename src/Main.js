@@ -5,8 +5,6 @@ const Fetch = require("node-fetch");
 
 DotEnv.config({ path: Path.resolve('config', 'Config.env') });
 
-const webhook = process.env.WEBHOOK;
-
 const Logger = require('./Service/Logger.Service');
 const Client = require('./Service/Client.Service');
 
@@ -16,7 +14,7 @@ Client();
 
 process.on('unhandledRejection', err =>
 {
-    Fetch(webhook,
+    Fetch(process.env.ERROR_EVENT_WEBHOOK,
         {
             method: "post",
             headers:

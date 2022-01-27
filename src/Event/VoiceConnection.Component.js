@@ -1,9 +1,6 @@
 const Logger = require('../Service/Logger.Service');
 const VoiceDiscord = require('@discordjs/voice');
 
-const GuildId = process.env.AUTO_JOIN_GUILD;
-const ChannelId = process.env.AUTO_JOIN_CHANNEL;
-
 module.exports =
     {
         name: "ready",
@@ -11,6 +8,9 @@ module.exports =
 
         async execute(Args, Client)
         {
+            const GuildId = process.env.AUTO_JOIN_GUILD;
+            const ChannelId = process.env.AUTO_JOIN_CHANNEL;
+
             await VoiceDiscord.joinVoiceChannel(
                 {
                     channelId: ChannelId,

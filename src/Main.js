@@ -5,15 +5,14 @@ const Fetch = require("node-fetch");
 
 DotEnv.config({ path: Path.resolve('config', 'Config.env') });
 
-const token = process.env.TOKEN;
 const webhook = process.env.WEBHOOK;
 
 const Logger = require('./Service/Logger.Service');
-const { Client } = require('./Service/Client.Service');
+const Client = require('./Service/Client.Service');
 
-Logger.info('App is Running ...');
+Logger.info('App is Running!');
 
-Client.login(token);
+Client();
 
 process.on('unhandledRejection', err =>
 {

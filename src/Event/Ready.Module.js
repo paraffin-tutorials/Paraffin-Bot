@@ -13,5 +13,5 @@ module.exports =
             Logger.info(`Bot is Logged in as ${Client.user.tag}!`);
 
             UpdateServersCount(Client);
-        },
+        }
     };

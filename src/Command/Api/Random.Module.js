@@ -3,11 +3,11 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 module.exports =
     {
         data: new SlashCommandBuilder()
-            .setName('ping')
-            .setDescription('Bot Ping!'),
+            .setName('random')
+            .setDescription('Random Tutorial or User!'),
 
         async execute(interaction)
         {
-            return interaction.reply({ content: `pong!` });
+            return interaction.reply({ content: `hi!` });
         },
     };

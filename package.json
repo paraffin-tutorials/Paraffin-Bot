@@ -24,13 +24,14 @@
         "@discordjs/builders": "^0.11.0",
         "@discordjs/rest": "^0.3.0",
         "@discordjs/voice": "^0.8.0",
+        "discord-api-types": "^0.26.1",
         "discord.js": "^13.6.0",
+        "dotenv": "^14.3.2",
         "fs": "^0.0.1-security",
         "moment": "^2.29.1",
-        "node-fetch": "^2.6.7",
-        "discord-api-types": "^0.26.1",
-        "dotenv": "^14.3.2",
         "node": "^16.13.2",
+        "node-fetch": "^2.6.7",
+        "screenshotmachine": "^2.0.0",
         "winston": "^3.4.0"
     }
 }

@@ -11,7 +11,7 @@ module.exports =
             const Embed = new MessageEmbed()
                 .setTitle(`Left from a Server`)
                 .setDescription(`**Server Name:** ${Guild.name}\n **Server ID:** ${Guild.id}\n **Members Count:** ${Guild.memberCount}`)
-                .setFooter('Paraffin Guild event system', 'https/paraffin-tutorials.ir/img/favicon.png')
+                .setFooter('Paraffin Guild event system', 'https://paraffin-tutorials.ir/img/favicon.png')
                 .setTimestamp()
                 .setColor("#e92e2e");
 

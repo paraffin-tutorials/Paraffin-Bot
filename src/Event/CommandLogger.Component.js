@@ -20,7 +20,7 @@ module.exports =
                     { name: '**Channel:**', value: Interaction.channel.name,   inline: true },
                     { name: '**Command:**', value: Interaction.commandName, inline: true },
                 )
-                .setFooter('Paraffin Interaction handler system', 'https/paraffin-tutorials.ir/img/favicon.png')
+                .setFooter({ text: 'Paraffin Interaction handler system', iconURL: 'https://paraffin-tutorials.ir/img/favicon.png' })
                 .setTimestamp()
                 .setColor("#e92e2e");
 

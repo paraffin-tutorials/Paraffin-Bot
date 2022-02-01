@@ -6,8 +6,8 @@ module.exports =
             .setName('website')
             .setDescription('Website Information & Status!'),
 
-        async execute(interaction)
+        async execute(Interaction)
         {
-            return interaction.reply({ content: `hi!` });
+            return Interaction.reply({ content: `hi!` });
         },
     };

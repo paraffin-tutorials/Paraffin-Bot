@@ -6,8 +6,8 @@ module.exports =
             .setName('support')
             .setDescription('Support Server of the Bot!'),
 
-        async execute(interaction)
+        async execute(Interaction)
         {
-            return interaction.reply({ content: `hi!` });
+            return Interaction.reply({ content: `hi!` });
         },
     };

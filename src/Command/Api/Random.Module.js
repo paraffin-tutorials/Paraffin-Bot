@@ -6,8 +6,8 @@ module.exports =
             .setName('random')
             .setDescription('Random Tutorial or User!'),
 
-        async execute(interaction)
+        async execute(Interaction)
         {
-            return interaction.reply({ content: `hi!` });
+            return Interaction.reply({ content: `hi!` });
         },
     };

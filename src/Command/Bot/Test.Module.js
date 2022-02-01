@@ -1,5 +1,5 @@
-const { MessageActionRow, MessageButton , MessageEmbed} = require('discord.js');
 const { SlashCommandBuilder } = require('@discordjs/builders');
+const { MessageActionRow, MessageButton , MessageEmbed} = require('discord.js');
 
 module.exports =
     {
@@ -7,7 +7,7 @@ module.exports =
             .setName('test')
             .setDescription('test cmd'),
 
-        async execute(interaction)
+        async execute(Interaction)
         {
             const row = new MessageActionRow()
                 .addComponents(
@@ -31,7 +31,7 @@ module.exports =
                 .setImage("../Asset/favicon.png")
                 .setColor("RANDOM")
 
-            return interaction.reply({embeds: [embed] , components: [row]});
+            return Interaction.reply({embeds: [embed] , components: [row]});
         },
     };
 

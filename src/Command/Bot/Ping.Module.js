@@ -6,8 +6,8 @@ module.exports =
             .setName('ping')
             .setDescription('Bot Ping!'),
 
-        async execute(interaction)
+        async execute(Interaction)
         {
-            return interaction.reply({ content: `hi!` });
+            return Interaction.reply({ content: `hi!` });
         },
     };

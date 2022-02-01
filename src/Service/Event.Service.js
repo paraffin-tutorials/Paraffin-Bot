@@ -1,6 +1,6 @@
 module.exports = (Client) =>
 {
-    Client.handleEvents = async (EventFiles) =>
+    Client.HandleEvents = async (EventFiles) =>
     {
         for (const File of EventFiles)
         {

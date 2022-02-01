@@ -22,5 +22,5 @@ module.exports =
             let Channel = Client.channels.cache.get(ChannelId);
 
             Logger.info(`Bot is Joined in "${Channel.name}" Voice-Channel!`);
-        },
+        }
     };

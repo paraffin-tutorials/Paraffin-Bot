@@ -1,5 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 
+const RandomService = require('./Random.Service');
+
 module.exports =
     {
         data: new SlashCommandBuilder()
@@ -7,23 +9,18 @@ module.exports =
             .setDescription('Random Tutorial or User!')
             .addStringOption(option => option
                 .setName('choose')
-                .setDescription('bakhsh morede nazar ra entekhab konid')
+                .setDescription('Get Random Tutorial or User Information!')
                 .addChoice('User','user')
-                .addChoice('Tutorials', 'toturial')
+                .addChoice('Tutorial', 'tutorial')
                 .setRequired(true)),
+
+        service: new RandomService(),
 
         async execute(Interaction)
         {
-            const choose = await interaction.options.getString('choose'); 
-            if(choose === "user")
-            {
+            const Type = await Interaction.options.getString('type');
+            const Data = this.service.Find(Type);
 
-            }
-
-            if(choose === "toturial")
-            {
-
-            }
-            
-        },
+            console.log(Data)
+        }
     };

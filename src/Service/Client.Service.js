@@ -24,8 +24,8 @@ const RunClient = async () =>
     require(`./Event.Service`)(client);
     require(`./Command.Service`)(client);
 
-    client.HandleEvents(EventsFiles, path.resolve('src', 'Event'));
-    client.HandleCommands(CommandFolders, path.resolve('src', 'Command'));
+    client.HandleEvents(EventsFiles);
+    client.HandleCommands(CommandFolders);
 
     await client.login(process.env.TOKEN);
 };

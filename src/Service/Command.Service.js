@@ -8,13 +8,13 @@ const Logger = require('./Logger.Service');
 
 module.exports = (Client) =>
 {
-    Client.CommandArray = [];
-    Client.Commands = new Collection();
-
-    const ClientId = process.env.BOT_ID;
-
     Client.HandleCommands = async (CommandFolders) =>
     {
+        Client.CommandArray = [];
+        Client.Commands = new Collection();
+
+        const ClientId = process.env.BOT_ID;
+
         for (const Folder of CommandFolders)
         {
             const CommandFiles = fs
@@ -23,7 +23,7 @@ module.exports = (Client) =>
 
             for (const File of CommandFiles)
             {
-                const Command = require(`../Command/${Folder}/${File}`);
+                const Command = require(path.resolve('src', 'Command', Folder, File));
 
                 await Client.Commands.set(Command.data.name, Command);
 

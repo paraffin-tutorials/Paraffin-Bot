@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 
-const { TutorialService } = require('./Tutorial.Service');
+const TutorialService = require('./Tutorial.Service');
 
 module.exports =
     {

@@ -10,8 +10,12 @@ module.exports =
         {
             const Embed = new MessageEmbed()
                 .setTitle(`New Server Added`)
-                .setDescription(`**Server Name** ${Guild.name} \n**Server ID** : ${Guild.id} \n**Members Count** : ${Guild.memberCount} `)
-                .setFooter({ text: 'Paraffin Guild event system', iconURL: 'https://paraffin-tutorials.ir/img/favicon.png' })
+                .setDescription(`**Server Name:** ${Guild.name} \n**Server ID:** ${Guild.id} \n**Members Count:** ${Guild.memberCount} `)
+                .setFooter(
+                    {
+                        name: 'Paraffin Guild-Event System',
+                        iconURL: 'https://paraffin-tutorials.ir/image/favicon.png'
+                    })
                 .setTimestamp()
                 .setColor("#e92e2e");
 

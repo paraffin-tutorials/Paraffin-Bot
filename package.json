@@ -1,5 +1,5 @@
 {
-    "name": "Paraffin-Bot",
+    "name": "paraffin-bot",
     "version": "1.0.0",
     "description": "paraffin discord bot",
     "main": "src/Main.js",

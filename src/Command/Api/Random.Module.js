@@ -7,8 +7,8 @@ module.exports =
         data: new SlashCommandBuilder()
             .setName('random')
             .setDescription('Random Tutorial or User!')
-            .addStringOption(option => option
-                .setName('choose')
+            .addStringOption((Option) => Option
+                .setName('type')
                 .setDescription('Get Random Tutorial or User Information!')
                 .addChoice('User','user')
                 .addChoice('Tutorial', 'tutorial')
@@ -19,8 +19,6 @@ module.exports =
         async execute(Interaction)
         {
             const Type = await Interaction.options.getString('type');
-            const Data = this.service.Find(Type);
-
-            console.log(Data)
+            await this.service.Find(Interaction, Type);
         }
     };

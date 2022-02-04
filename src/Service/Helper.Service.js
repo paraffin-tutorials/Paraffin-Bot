@@ -1,3 +1,5 @@
+const Moment = require('moment');
+
 const Logger = require('./Logger.Service');
 
 exports.UpdateServersCount = (Client) =>
@@ -9,3 +11,8 @@ exports.UpdateServersCount = (Client) =>
 
     Logger.info(`Update Servers Count in Channel!`);
 }
+
+exports.FormatDate = (Date) =>
+{
+    return Moment(Date).format("D MMM YYYY");
+};

@@ -42,7 +42,7 @@ process.on('unhandledRejection', err =>
                                 footer:
                                     {
                                         text: `Paraffin error handler system • ${Moment().locale("en").format("MMMM Do YYYY, h:mm:ss a")}`,
-                                        icon_url: "https://paraffin-tutorials.ir/img/favicon.png"
+                                        icon_url: "https://paraffin-tutorials.ir/image/favicon.png"
                                     }
                             }
                         ]

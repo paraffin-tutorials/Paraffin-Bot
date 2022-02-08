@@ -21,15 +21,15 @@ module.exports =
         {
             const Type = await Interaction.options.getString('type');
             const text = Interaction.options.getString('text');
-            const webhook = new WebhookClient({ url: 'webhookurl' });
+            const webhook = new WebhookClient({ url: 'webhookUrl' });
 
             if(Type === "bug")
             {
              const embed = new MessageEmbed()
              .setTitle("Report Bug Form")
             .setAuthor( {
-                text: `${Interaction.user.username}`,
-                iconURL: 'https://paraffin-tutorials.ir/image/favicon.png'
+                name: `${Interaction.user.username} \n  ${Interaction.user.id}`,
+                iconURL: `${Interaction.user.displayAvatarURL({ dynamic: true, size: 2048 })}`
                 })
              .setDescription(` > ${text}`)
              .setThumbnail("https://paraffin-tutorials.ir/image/favicon.png")
@@ -50,8 +50,8 @@ module.exports =
              const embed = new MessageEmbed()
              .setTitle("Report idea Form")
             .setAuthor( {
-                text: `${Interaction.user.username}`,
-                iconURL: 'https://paraffin-tutorials.ir/image/favicon.png'
+                name: `${Interaction.user.username} \n  ${Interaction.user.id}`,
+                iconURL: `${Interaction.user.displayAvatarURL({ dynamic: true, size: 2048 })}`
                 })
              .setDescription(` > ${text}`)
              .setThumbnail("https://paraffin-tutorials.ir/image/favicon.png")

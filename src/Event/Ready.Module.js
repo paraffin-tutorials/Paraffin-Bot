@@ -3,7 +3,7 @@ const { UpdateServersCount } = require('../Service/Helper.Service');
 
 module.exports =
     {
-        name: "ready",
+        name: 'ready',
         once: true,
 
         async execute(Args, Client)

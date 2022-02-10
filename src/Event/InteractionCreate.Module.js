@@ -1,6 +1,6 @@
 module.exports =
     {
-        name: "interactionCreate",
+        name: 'interactionCreate',
 
         async execute(Interaction, Client)
         {

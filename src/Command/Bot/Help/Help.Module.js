@@ -12,6 +12,6 @@ module.exports =
 
         async execute(Interaction)
         {
-            await this.service.Send(Interaction);
+            await this.service.send(Interaction);
         }
     }

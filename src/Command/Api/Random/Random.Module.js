@@ -12,13 +12,15 @@ module.exports =
                 .setDescription('Get Random Tutorial or User Information!')
                 .addChoice('User','user')
                 .addChoice('Tutorial', 'tutorial')
-                .setRequired(true)),
+                .setRequired(true)
+            ),
 
         service: new RandomService(),
 
         async execute(Interaction)
         {
             const Type = await Interaction.options.getString('type');
-            await this.service.Find(Interaction, Type);
+
+            await this.service.send(Interaction, Type);
         }
     };

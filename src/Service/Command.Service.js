@@ -8,26 +8,31 @@ const Logger = require('./Logger.Service');
 
 module.exports = (Client) =>
 {
-    Client.HandleCommands = async (CommandFolders) =>
+    Client.HandleCommands = async (CommandsFolders) =>
     {
         Client.CommandArray = [];
         Client.Commands = new Collection();
 
         const ClientId = process.env.BOT_ID;
 
-        for (const Folder of CommandFolders)
+        for (const CommandsFolder of CommandsFolders)
         {
-            const CommandFiles = fs
-                .readdirSync(path.resolve('src', 'Command', Folder))
-                .filter((File) => File.endsWith('.Module.js'));
+            const CommandFolders = fs.readdirSync(path.resolve('src', 'Command', CommandsFolder));
 
-            for (const File of CommandFiles)
+            for (const CommandFolder of CommandFolders)
             {
-                const Command = require(path.resolve('src', 'Command', Folder, File));
+                const CommandFiles = fs
+                    .readdirSync(path.resolve('src', 'Command', CommandsFolder, CommandFolder))
+                    .filter((File) => File.endsWith('.Module.js'));
 
-                await Client.Commands.set(Command.data.name, Command);
+                for (const CommandFile of CommandFiles)
+                {
+                    const Command = require(path.resolve('src', 'Command', CommandsFolder, CommandFolder, CommandFile));
 
-                Client.CommandArray.push(Command.data.toJSON());
+                    await Client.Commands.set(Command.data.name, Command);
+
+                    await Client.CommandArray.push(Command.data.toJSON());
+                }
             }
         }
 
@@ -37,16 +42,16 @@ module.exports = (Client) =>
         {
             Logger.info(`Started refreshing application (/) commands.`);
 
-            await rest.put(Routes.applicationGuildCommands(ClientId , "908284384262639636"),
+            await rest.put(Routes.applicationGuildCommands(ClientId , '908284384262639636'),
                 {
                     body: Client.CommandArray,
                 });
 
             Logger.info(`Successfully reloaded application (/) commands.`);
         }
-        catch (error)
+        catch (Error)
         {
-            console.log(error);
+            Logger.error(Error);
         }
     };
 };

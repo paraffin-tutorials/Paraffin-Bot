@@ -7,18 +7,18 @@ module.exports =
         data: new SlashCommandBuilder()
             .setName('user')
             .setDescription('User Information!')
-            .addStringOption(options => options.setName('name').setDescription('User Name').setRequired(true)),
+            .addStringOption((Options) => Options
+                .setName('username')
+                .setDescription('User Name')
+                .setRequired(true)
+            ),
 
         service: new UserService(),
 
         async execute(Interaction)
         {
-            const UserName = Interaction.options.getString('name');
+            const Username = Interaction.options.getString('username');
 
-            const User = this.service.Find(UserName);
-
-            console.log(User);
-
-            return Interaction.reply({ content: `hi!` });
+            await this.service.send(Interaction, Username);
         }
     };

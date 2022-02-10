@@ -44,7 +44,7 @@ Client.run().then(() => {});
 //                                 footer:
 //                                     {
 //                                         text: `${process.env.EMBED_ERROR_COMMANDS_FOOTER} • ${Moment().locale('en').format('MMMM Do YYYY, h:mm:ss a')}`,
-//                                         icon_url: process.env.FAVICON_LINK
+//                                         icon_url: process.env.FAVICON
 //                                     }
 //                             }
 //                         ]

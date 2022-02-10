@@ -44,7 +44,7 @@ module.exports =
                 .setFooter(
                     {
                         text: 'Paraffin Interaction-Handler System',
-                        iconURL: process.env.FAVICON_LINK
+                        iconURL: process.env.FAVICON
                     })
                 .setTimestamp()
                 .setColor('#e92e2e');

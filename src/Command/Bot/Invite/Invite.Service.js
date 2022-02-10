@@ -38,7 +38,7 @@ class InviteService
 
         this.embed = new MessageEmbed()
             .setColor(process.env.EMBED_COLOR)
-            .setThumbnail(process.env.FAVICON_LINK)
+            .setThumbnail(process.env.FAVICON)
             .setAuthor(
                 {
                     name: 'Invite Paraffin-Bot with these button or links!'
@@ -60,7 +60,7 @@ class InviteService
             .setFooter(
                 {
                     text: process.env.EMBED_BOT_COMMANDS_FOOTER,
-                    iconURL: process.env.FAVICON_LINK
+                    iconURL: process.env.FAVICON
                 })
             .setTimestamp();
     }

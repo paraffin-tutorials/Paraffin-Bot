@@ -1,5 +1,6 @@
 const { MessageEmbed , MessageButton , MessageActionRow } = require('discord.js');
 
+const Logger = require('./Logger.Service');
 const HelpService = require('../Command/Bot/Help/Help.Service');
 
 class ErrorService
@@ -26,7 +27,7 @@ class ErrorService
             .setFooter(
                 {
                     text: process.env.EMBED_ERROR_COMMANDS_FOOTER,
-                    iconURL: process.env.FAVICON_LINK
+                    iconURL: process.env.FAVICON
                 })
             .setColor(process.env.EMBED_COLOR)
             .setTimestamp();
@@ -52,9 +53,11 @@ class ErrorService
         }
         catch (Error)
         {
+            Logger.error(Error)
+
             await this.structure(Interaction, 'ارور از سرویس', 'ارور از سرویس ما است با ریپورت کردن آن مارا از این ارور با خبر کنید تا به زودی فیکس شود');
 
-            return await Interaction.reply({ embeds: [ this.embed ], components : [ this.row ] });
+            return await Interaction.update({ embeds: [ this.embed ], components : [ this.row ] });
         }
     }
 }

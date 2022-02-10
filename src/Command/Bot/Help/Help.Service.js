@@ -17,32 +17,32 @@ class HelpService
         this.helpRow = new MessageActionRow()
             .addComponents(
                 new MessageSelectMenu()
-                    .setCustomId(Interaction.id + '__HELP_MENU')
+                    .setCustomId(Interaction.id + '_HELP_MENU')
                     .setPlaceholder('Paraffin Tutorials Bot Help Menu')
                     .addOptions(
                         [
                             {
                                 description: 'Tutorials Info, Users Info, Random Tutorials, Random Users',
                                 label: 'Service',
-                                value: 'PAGE_1'
+                                value: 'PAGE_HELP_MENU_1'
                             },
                             {
                                 description: 'Website Services, Website Info, Website Stats',
                                 label: 'Website',
-                                value: 'PAGE_2'
+                                value: 'PAGE_HELP_MENU_2'
 
                             },
                             {
                                 description: 'Bot Services, Invite Bot, Bot Info, Bot Stats, Report, Bot Ping, Bot Help',
                                 label: 'Bot',
-                                value: 'PAGE_3'
+                                value: 'PAGE_HELP_MENU_3'
                             }
                         ])
             );
 
         this.helpEmbed = new MessageEmbed()
             .setColor(process.env.EMBED_COLOR)
-            .setThumbnail(process.env.FAVICON_LINK)
+            .setThumbnail(process.env.FAVICON)
             .setAuthor(
                 {
                     name: 'Paraffin Tutorials Bot Help Menu'
@@ -56,19 +56,29 @@ class HelpService
             .setFooter(
                 {
                     text: process.env.EMBED_BOT_COMMANDS_FOOTER,
-                    iconURL: process.env.FAVICON_LINK
+                    iconURL: process.env.FAVICON
                 })
             .setTimestamp();
 
-        const Collector = Interaction.channel.createMessageComponentCollector({ componentType: 'SELECT_MENU', time: 240000  });
-
-        Collector.on('collect', async (Event) =>
+        if (Type === 'PAGE_ERROR')
         {
-            if (Event.customId === Interaction.id + '__HELP_MENU')
+            await Event.update({ embeds: [ this.helpEmbed ], components: [ this.helpRow ] });
+
+            return await this.menuCollector(Interaction);
+        }
+    }
+
+    async menuCollector(Interaction)
+    {
+        this.collector = Interaction.channel.createMessageComponentCollector({ componentType: 'SELECT_MENU', time: 240000  });
+
+        this.collector.on('collect', async (Event) =>
+        {
+            if (Event.customId === Interaction.id + '_HELP_MENU')
             {
-                switch (Type)
+                switch (Event.values[0])
                 {
-                    case 'PAGE_1':
+                    case 'PAGE_HELP_MENU_1':
                     {
                         this.helpRow = new MessageActionRow()
                             .addComponents(
@@ -99,7 +109,7 @@ class HelpService
 
                         const HelpEmbed = new MessageEmbed()
                             .setColor(process.env.EMBED_COLOR)
-                            .setThumbnail(process.env.FAVICON_LINK)
+                            .setThumbnail(process.env.FAVICON)
                             .setAuthor(
                                 {
                                     name: 'Paraffin Tutorials Bot Service-Help Menu'
@@ -108,7 +118,7 @@ class HelpService
                             .setFooter(
                                 {
                                     text: process.env.EMBED_BOT_COMMANDS_FOOTER,
-                                    iconURL: process.env.FAVICON_LINK
+                                    iconURL: process.env.FAVICON
                                 })
                             .setTimestamp();
 
@@ -116,7 +126,7 @@ class HelpService
 
                         break;
                     }
-                    case 'PAGE_2':
+                    case 'PAGE_HELP_MENU_2':
                     {
                         this.helpRow = new MessageActionRow()
                             .addComponents(
@@ -147,7 +157,7 @@ class HelpService
 
                         const HelpEmbed = new MessageEmbed()
                             .setColor(process.env.EMBED_COLOR)
-                            .setThumbnail(process.env.FAVICON_LINK)
+                            .setThumbnail(process.env.FAVICON)
                             .setAuthor(
                                 {
                                     name: 'Paraffin Tutorials Bot Website-Help Menu'
@@ -156,7 +166,7 @@ class HelpService
                             .setFooter(
                                 {
                                     text: process.env.EMBED_BOT_COMMANDS_FOOTER,
-                                    iconURL: process.env.FAVICON_LINK
+                                    iconURL: process.env.FAVICON
                                 })
                             .setTimestamp();
 
@@ -164,7 +174,7 @@ class HelpService
 
                         break;
                     }
-                    case 'PAGE_3':
+                    case 'PAGE_HELP_MENU_3':
                     {
                         this.helpRow = new MessageActionRow()
                             .addComponents(
@@ -195,7 +205,7 @@ class HelpService
 
                         const HelpEmbed = new MessageEmbed()
                             .setColor(process.env.EMBED_COLOR)
-                            .setThumbnail(process.env.FAVICON_LINK)
+                            .setThumbnail(process.env.FAVICON)
                             .setAuthor(
                                 {
                                     name: 'Paraffin Tutorials Bot Bot-Help Menu'
@@ -204,7 +214,7 @@ class HelpService
                             .setFooter(
                                 {
                                     text: process.env.EMBED_BOT_COMMANDS_FOOTER,
-                                    iconURL: process.env.FAVICON_LINK
+                                    iconURL: process.env.FAVICON
                                 })
                             .setTimestamp();
 
@@ -215,11 +225,6 @@ class HelpService
                 }
             }
         });
-
-        if (Type === 'PAGE_ERROR')
-        {
-            return await Event.followUp({ embeds: [ this.helpEmbed ], components: [ this.helpRow ] });
-        }
     }
 
     async send(Interaction)
@@ -227,6 +232,7 @@ class HelpService
         try
         {
             await this.structure(Interaction);
+            await this.menuCollector(Interaction);
 
             return await Interaction.reply({ embeds: [ this.helpEmbed ], components: [ this.helpRow ] });
         }

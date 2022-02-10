@@ -14,7 +14,7 @@ module.exports =
                 .setFooter(
                     {
                         name: 'Paraffin Guild-Event System',
-                        iconURL: process.env.FAVICON_LINK
+                        iconURL: process.env.FAVICON
                     })                .setTimestamp()
                 .setColor('#e92e2e');
 

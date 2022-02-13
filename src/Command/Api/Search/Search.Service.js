@@ -2,8 +2,8 @@ const axios = require('axios');
 
 const Logger = require('../../../Service/Logger.Service');
 const ErrorService = require('../../../Service/Error.Service');
-const UserService = require('../User/User.Service');
-const TutorialService = require('../Tutorial/Tutorial.Service');
+const UsersService = require('../Users/Users.Service');
+const TutorialsService = require('../Tutorials/Tutorials.Service');
 
 class RandomService
 {
@@ -11,8 +11,8 @@ class RandomService
     {
         this.error = false;
         this.errorService = new ErrorService();
-        this.userService = new UserService();
-        this.tutorialService = new TutorialService();
+        this.usersService = new UsersService();
+        this.tutorialsService = new TutorialsService();
     }
 
     async optionsValidation(Interaction)
@@ -34,9 +34,9 @@ class RandomService
 
     async data(Interaction)
     {
-        this.response = await axios.get(`https://api.paraffin-tutorials.ir/api/${process.env.API_VERSION}/search/${this.type}`);
+        this.response = await axios.get(encodeURI(`https://api.paraffin-tutorials.ir/api/${process.env.API_VERSION}/search/${this.type.trim()}?keyword=${this.keyword.trim()}`));
 
-        if (this.response.data?.status !== 'success')
+        if (!this.response.data[this.type + 's'][0])
         {
             this.error = true;
 
@@ -62,13 +62,13 @@ class RandomService
                 {
                     case 'user':
                     {
-                        await this.userService.send(Interaction, this.response, 'SEARCH_COMMAND');
+                        await this.usersService.send(Interaction, this.response, 'SEARCH_COMMAND');
 
                         break;
                     }
                     case 'tutorial':
                     {
-                        await this.tutorialService.send(Interaction, this.response, 'SEARCH_COMMAND');
+                        await this.tutorialsService.send(Interaction, this.response, 'SEARCH_COMMAND');
 
                         break;
                     }

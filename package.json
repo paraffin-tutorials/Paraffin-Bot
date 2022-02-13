@@ -2,9 +2,9 @@
     "name": "paraffin-bot",
     "version": "1.0.0",
     "description": "paraffin discord bot",
-    "main": "src/Main.js",
+    "main": "src/main.js",
     "scripts": {
-        "start": "node src/Main.js",
+        "start": "node src/main.js",
         "dev": "nodemon",
         "lint": "eslint . --ext .js,.ts",
         "test": "jest",

@@ -18,7 +18,7 @@ class StatsService
             .addComponents(
                 new MessageButton()
                     .setLabel('Refresh')
-                    .setCustomId('PAGE_STATS_REFRESH')
+                    .setCustomId(Interaction.id + '_PAGE_STATS_REFRESH')
                     .setEmoji('<:RepeatIcon:941290998171045928>')
                     .setStyle('DANGER')
             );
@@ -93,7 +93,7 @@ class StatsService
 
         this.collector.on('collect', async (Event) =>
         {
-            if (Event.customId === 'PAGE_STATS_REFRESH')
+            if (Event.customId === (Interaction.id + 'PAGE_STATS_REFRESH'))
             {
                await this.structure(Interaction);
 

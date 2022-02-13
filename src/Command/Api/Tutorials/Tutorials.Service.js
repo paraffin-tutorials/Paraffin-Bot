@@ -29,7 +29,7 @@ class RandomService
     {
         try
         {
-            this.response = await axios.get(`https://api.paraffin-tutorials.ir/api/${process.env.API_VERSION}/tutorials?skip=${this.currentArray}&limit=1&sort=${this.sort}`);
+            this.response = await axios.get(`https://api.paraffin-tutorials.ir/api/${process.env.API_VERSION}/tutorials?skip=${this.currentArray}&limit=1&sort=${this.sort.trim()}`);
 
             if (this.response.data?.status !== 'success')
             {
@@ -59,12 +59,12 @@ class RandomService
                 this.tutorialControllerRow = new MessageActionRow()
                     .addComponents(
                         new MessageButton()
-                            .setCustomId('PREVIOUS_PAGE_TUTORIALS')
+                            .setCustomId(Interaction.id + '_PREVIOUS_PAGE_TUTORIALS')
                             .setEmoji('<:Left:849352126881857538>')
                             .setStyle('DANGER'),
 
                         new MessageButton()
-                            .setCustomId('NEXT_PAGE_TUTORIALS')
+                            .setCustomId(Interaction.id + '_NEXT_PAGE_TUTORIALS')
                             .setEmoji('<:Right:849352129381531668>')
                             .setStyle('DANGER')
                     );
@@ -74,57 +74,57 @@ class RandomService
                         new MessageButton()
                             .setLabel('More')
                             .setEmoji('<:LinkIcon:939151538792824842>')
-                            .setURL('https://paraffin-tutorials.ir/tutorials/' + this.response.data.tutorials[0].name)
+                            .setURL('https://paraffin-tutorials.ir/tutorials/' + this.response.data.tutorials[this.type === 'SEARCH_COMMAND' ? this.currentArray : 0].name)
                             .setStyle('LINK')
                     );
 
                 this.tutorialEmbed = new MessageEmbed()
-                    .setColor(this.response.data.tutorials[0].author.baseColor)
-                    .setThumbnail(process.env.IMAGE_LINK + this.response.data.tutorials[0].author.profile)
-                    .setImage(process.env.IMAGE_LINK + this.response.data.tutorials[0].image)
+                    .setColor(this.response.data.tutorials[this.type === 'SEARCH_COMMAND' ? this.currentArray : 0].author.baseColor)
+                    .setThumbnail(process.env.IMAGE_LINK + this.response.data.tutorials[this.type === 'SEARCH_COMMAND' ? this.currentArray : 0].author.profile)
+                    .setImage(process.env.IMAGE_LINK + this.response.data.tutorials[this.type === 'SEARCH_COMMAND' ? this.currentArray : 0].image)
                     .setAuthor(
                         {
-                            name: this.response.data.tutorials[0].name.toUpperCase() + ((this.response.data.tutorials[0].edited ? '' : 'ویرایش شده') || '')
+                            name: this.response.data.tutorials[this.type === 'SEARCH_COMMAND' ? this.currentArray : 0].name.toUpperCase() + ((this.response.data.tutorials[this.type === 'SEARCH_COMMAND' ? this.currentArray : 0].edited ? '' : ' ویرایش شده ') || '') + ` (${this.currentEmbed}/${this.response.data.tutorialsCount})`
                         })
                     .setDescription(
-                        `> **${this.response.data.tutorials[0].title}**` +
+                        `> **${this.response.data.tutorials[this.type === 'SEARCH_COMMAND' ? this.currentArray : 0].title}**` +
                         '\n> ' +
-                        `\n> ${this.response.data.tutorials[0].description}`
+                        `\n> ${this.response.data.tutorials[this.type === 'SEARCH_COMMAND' ? this.currentArray : 0].description}`
                     )
                     .addFields(
                         {
                             name: '**<:PenIcon:940921189004640276> Author:**',
-                            value: '```' + this.response.data.tutorials[0].author.username + '```',
+                            value: '```' + this.response.data.tutorials[this.type === 'SEARCH_COMMAND' ? this.currentArray : 0].author.username + '```',
                             inline: true
                         },
                         {
                             name: '**<:HeartIcon:940919983024766986> Likes:**',
-                            value: '```' + (this.response.data.tutorials[0].likes || 0)  + '```',
+                            value: '```' + (this.response.data.tutorials[this.type === 'SEARCH_COMMAND' ? this.currentArray : 0].likes || 0)  + '```',
                             inline: true
                         },
                         {
                             name: '**<:EyeIcon:940920543408955464> Views:**',
-                            value: '```' + (this.response.data.tutorials[0].views || 0) + '```',
+                            value: '```' + (this.response.data.tutorials[this.type === 'SEARCH_COMMAND' ? this.currentArray : 0].views || 0) + '```',
                             inline: true
                         },
                         {
                             name: '**<:CommentIcon:940922931863764992> Comments:**',
-                            value: '```' + (this.response.data.tutorials[0].comments || 0) + '```',
+                            value: '```' + (this.response.data.tutorials[this.type === 'SEARCH_COMMAND' ? this.currentArray : 0].comments || 0) + '```',
                             inline: true
                         },
                         {
                             name: '**<:CpuIcon:940922798367440896> Hardship Level:**',
-                            value: '```' + (this.response.data.tutorials[0].hardshipLevel || 'آسان') + '```',
+                            value: '```' + (this.response.data.tutorials[this.type === 'SEARCH_COMMAND' ? this.currentArray : 0].hardshipLevel || 'آسان') + '```',
                             inline: true
                         },
                         {
                             name: '**<:CpuIcon:940922798367440896> Training Level:**',
-                            value: '```' + (this.response.data.tutorials[0].trainingLevel || 'مبتدی') + '```',
+                            value: '```' + (this.response.data.tutorials[this.type === 'SEARCH_COMMAND' ? this.currentArray : 0].trainingLevel || 'مبتدی') + '```',
                             inline: true
                         },
                         {
                             name: '**<:CalenderIcon:940919983305801809> Created At:**',
-                            value: '```' + (FormatDate(this.response.data.tutorials[0].createdAt) || '1 Jan 1970') + '```',
+                            value: '```' + (FormatDate(this.response.data.tutorials[this.type === 'SEARCH_COMMAND' ? this.currentArray : 0].createdAt) || '1 Jan 1970') + '```',
                             inline: true
                         },
                         {
@@ -161,7 +161,7 @@ class RandomService
             {
                 switch (Event.customId)
                 {
-                    case 'PREVIOUS_PAGE_TUTORIALS':
+                    case Interaction.id + '_PREVIOUS_PAGE_TUTORIALS':
                     {
                         if (this.currentEmbed > 1)
                         {
@@ -174,14 +174,18 @@ class RandomService
                             this.currentArray = this.response.data.tutorialsCount - 1;
                         }
 
-                        await this.data(Interaction);
+                        if (this.type !== 'SEARCH_COMMAND')
+                        {
+                            await this.data(Interaction);
+                        }
+
                         await this.structure(Interaction);
 
                         await Event.update({ embeds: [ this.tutorialEmbed ], components: [ this.tutorialControllerRow, this.tutorialRow ] });
 
                         break;
                     }
-                    case 'NEXT_PAGE_TUTORIALS':
+                    case Interaction.id + '_NEXT_PAGE_TUTORIALS':
                     {
                         if (this.currentEmbed === this.response.data.tutorialsCount)
                         {
@@ -194,7 +198,11 @@ class RandomService
                             this.currentArray++;
                         }
 
-                        await this.data(Interaction);
+                        if (this.type !== 'SEARCH_COMMAND')
+                        {
+                            await this.data(Interaction);
+                        }
+
                         await this.structure(Interaction);
 
                         await Event.update({ embeds: [ this.tutorialEmbed ], components: [ this.tutorialControllerRow, this.tutorialRow ] });
@@ -214,16 +222,39 @@ class RandomService
         }
     }
 
-    async send(Interaction)
+    async send(Interaction, Data, Type)
     {
         try
         {
-            this.sort = await Interaction.options.getString('sort') || 'views';
+            switch (Type)
+            {
+                case 'SEARCH_COMMAND':
+                {
+                    if (!Data)
+                    {
+                        return await this.errorService.send(Interaction);
+                    }
 
-            await this.optionsValidation(Interaction);
-            await this.data(Interaction);
-            await this.structure(Interaction)
-            await this.buttonCollector(Interaction);
+                    this.type = Type;
+                    this.response = Data;
+
+                    await this.structure(Interaction)
+                    await this.buttonCollector(Interaction);
+
+                    break;
+                }
+                default:
+                {
+                    this.sort = await Interaction.options.getString('sort') || 'views';
+
+                    await this.optionsValidation(Interaction);
+                    await this.data(Interaction);
+                    await this.structure(Interaction)
+                    await this.buttonCollector(Interaction);
+
+                    break;
+                }
+            }
 
             if (!this.error)
             {

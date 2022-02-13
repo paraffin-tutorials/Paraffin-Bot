@@ -56,22 +56,15 @@ class RandomService
         {
             if (!this.error)
             {
-                this.tags = [];
-
-                for (const Tag of this.response.data.users[0].tags)
-                {
-                    this.tags.push(Tag)
-                }
-
                 this.userControllerRow = new MessageActionRow()
                     .addComponents(
                         new MessageButton()
-                            .setCustomId('PREVIOUS_PAGE_USERS')
+                            .setCustomId(Interaction.id + '_PREVIOUS_PAGE_USERS')
                             .setEmoji('<:Left:849352126881857538>')
                             .setStyle('DANGER'),
 
                         new MessageButton()
-                            .setCustomId('NEXT_PAGE_USERS')
+                            .setCustomId(Interaction.id + '_NEXT_PAGE_USERS')
                             .setEmoji('<:Right:849352129381531668>')
                             .setStyle('DANGER')
                     );
@@ -81,46 +74,46 @@ class RandomService
                         new MessageButton()
                             .setLabel('More')
                             .setEmoji('<:LinkIcon:939151538792824842>')
-                            .setURL('https://paraffin-tutorials.ir/users/' + this.response.data.users[0].username)
+                            .setURL('https://paraffin-tutorials.ir/users/' + this.response.data.users[this.type === 'SEARCH_COMMAND' ? this.currentArray : 0].username)
                             .setStyle('LINK')
                     );
 
                 this.userEmbed = new MessageEmbed()
-                    .setColor(this.response.data.users[0].baseColor)
-                    .setThumbnail(process.env.IMAGE_LINK + this.response.data.users[0].profile)
+                    .setColor(this.response.data.users[this.type === 'SEARCH_COMMAND' ? this.currentArray : 0].baseColor)
+                    .setThumbnail(process.env.IMAGE_LINK + this.response.data.users[this.type === 'SEARCH_COMMAND' ? this.currentArray : 0].profile)
                     .setAuthor(
                         {
-                            name: `${this.response.data.users[0].username.toUpperCase()} (${this.currentEmbed}/${this.response.data.usersCount})`
+                            name: `${this.response.data.users[this.type === 'SEARCH_COMMAND' ? this.currentArray : 0].username.toUpperCase()} (${this.currentEmbed}/${this.response.data.usersCount})`
                         })
                     .setDescription(
-                        `> ${this.response.data.users[0].description}` +
+                        `> ${this.response.data.users[this.type === 'SEARCH_COMMAND' ? this.currentArray : 0].description}` +
                         '\n\n**<:HashIcon:940924838338523176> Tags:**' +
-                        '```' + (this.tags.join(' - ') || '') + '```'
+                        '```' + (this.response.data.users[this.type === 'SEARCH_COMMAND' ? this.currentArray : 0].tags.join(' - ') || '') + '```'
                     )
                     .addFields(
                         {
                             name: '**<:AwardIcon:940919059539722260> Subscription:**',
-                            value: '```' + ((this.response.data.users[0].premium ? 'ویژه' : 'عادی') || 'عادی') + '```',
+                            value: '```' + ((this.response.data.users[this.type === 'SEARCH_COMMAND' ? this.currentArray : 0].premium ? 'ویژه' : 'عادی') || 'عادی') + '```',
                             inline: true
                         },
                         {
                             name: '**<:PeopleIcon:940921189436641300> Followers:**',
-                            value: '```' + (this.response.data.followers[0] || 0) + '```',
+                            value: '```' + (this.response.data.users[this.type === 'SEARCH_COMMAND' ? this.currentArray : 0].followers || 0) + '```',
                             inline: true
                         },
                         {
                             name: '**<:PeopleIcon:940921189436641300> Followings:**',
-                            value: '```' + (this.response.data.followings[0] || 0) + '```',
+                            value: '```' + (this.response.data.users[this.type === 'SEARCH_COMMAND' ? this.currentArray : 0].following || 0) + '```',
                             inline: true
                         },
                         {
                             name: '**<:BookIcon:940923075027939358> Tutorials:**',
-                            value: '```' + (this.response.data.tutorials[0] || 0) + '```',
+                            value: '```' + (this.response.data.users[this.type === 'SEARCH_COMMAND' ? this.currentArray : 0].tutorials.length || 0) + '```',
                             inline: true
                         },
                         {
                             name: '**<:CalenderIcon:940919983305801809> Created At:**',
-                            value: '```' + (FormatDate(this.response.data.users[0].createdAt) || '1 Jan 1970') + '```',
+                            value: '```' + (FormatDate(this.response.data.users[this.type === 'SEARCH_COMMAND' ? this.currentArray : 0].createdAt) || '1 Jan 1970') + '```',
                             inline: true
                         },
                         {
@@ -136,9 +129,9 @@ class RandomService
                         })
                     .setTimestamp();
 
-                if (this.response.data.users[0].background !== '/image/background/background-user-default.jpg')
+                if (this.response.data.users[this.type === 'SEARCH_COMMAND' ? this.currentArray : 0].background !== '/image/background/background-user-default.jpg')
                 {
-                    this.userEmbed.setImage(process.env.IMAGE_LINK + this.response.data.users[0].background)
+                    this.userEmbed.setImage(process.env.IMAGE_LINK + this.response.data.users[this.type === 'SEARCH_COMMAND' ? this.currentArray : 0].background)
                 }
             }
         }
@@ -162,7 +155,7 @@ class RandomService
             {
                 switch (Event.customId)
                 {
-                    case 'PREVIOUS_PAGE_USERS':
+                    case Interaction.id + '_PREVIOUS_PAGE_USERS':
                     {
                         if (this.currentEmbed > 1)
                         {
@@ -175,14 +168,18 @@ class RandomService
                             this.currentArray = this.response.data.usersCount - 1;
                         }
 
-                        await this.data(Interaction);
+                        if (this.type !== 'SEARCH_COMMAND')
+                        {
+                            await this.data(Interaction);
+                        }
+
                         await this.structure(Interaction);
 
                         await Event.update({ embeds: [ this.userEmbed ], components: [ this.userControllerRow, this.userRow ] });
 
                         break;
                     }
-                    case 'NEXT_PAGE_USERS':
+                    case Interaction.id + '_NEXT_PAGE_USERS':
                     {
                         if (this.currentEmbed === this.response.data.usersCount)
                         {
@@ -195,7 +192,11 @@ class RandomService
                             this.currentArray++;
                         }
 
-                        await this.data(Interaction);
+                        if (this.type !== 'SEARCH_COMMAND')
+                        {
+                            await this.data(Interaction);
+                        }
+
                         await this.structure(Interaction);
 
                         await Event.update({ embeds: [ this.userEmbed ], components: [ this.userControllerRow, this.userRow ] });
@@ -215,16 +216,39 @@ class RandomService
         }
     }
 
-    async send(Interaction)
+    async send(Interaction, Data, Type)
     {
         try
         {
-            this.sort = await Interaction.options.getString('sort') || 'followers';
+            switch (Type)
+            {
+                case 'SEARCH_COMMAND':
+                {
+                    if (!Data)
+                    {
+                        return await this.errorService.send(Interaction);
+                    }
 
-            await this.optionsValidation(Interaction);
-            await this.data(Interaction);
-            await this.structure(Interaction)
-            await this.buttonCollector(Interaction);
+                    this.type = Type;
+                    this.response = Data;
+
+                    await this.structure(Interaction)
+                    await this.buttonCollector(Interaction);
+
+                    break;
+                }
+                default:
+                {
+                    this.sort = await Interaction.options.getString('sort') || 'followers';
+
+                    await this.optionsValidation(Interaction);
+                    await this.data(Interaction);
+                    await this.structure(Interaction)
+                    await this.buttonCollector(Interaction);
+
+                    break;
+                }
+            }
 
             if (!this.error)
             {

@@ -48,7 +48,7 @@ class ClientService
         await this.client.login(process.env.TOKEN);
     }
 
-    async run()
+    async start()
     {
         try
         {

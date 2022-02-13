@@ -10,12 +10,7 @@ class RandomService
     constructor()
     {
         this.currentEmbed = 'PAGE_PROFILE';
-        this.userTags = [];
         this.tutorialsPerEmbed = 5;
-        this.tutorialsCurrentEmbed = 1;
-        this.tutorialsCurrentArray = 0;
-        this.tutorialsCurrentArrayItem = 1;
-        this.userTutorials = [ [], [], [], [], [], [], [], [], [], [] ];
         this.error = false;
         this.errorService = new ErrorService();
     }
@@ -24,7 +19,7 @@ class RandomService
     {
         try
         {
-            this.response = await axios.get(`https://api.paraffin-tutorials.ir/api/${process.env.API_VERSION}/users/${this.username.toLowerCase()}`);
+            this.response = await axios.get(encodeURI(`https://api.paraffin-tutorials.ir/api/${process.env.API_VERSION}/users/${this.username.toLowerCase().trim()}`));
 
             if (this.response.data?.status !== 'success')
             {
@@ -34,20 +29,34 @@ class RandomService
 
                 return this.errorService.send(Interaction, 'Internal Api Error', 'No user was found with this username.');
             }
+        }
+        catch (Error)
+        {
+            this.error = true;
 
-            this.tutorialsLastEmbed = Math.ceil(this.response.data.tutorials.length / this.tutorialsPerEmbed);
+            Logger.error(Error);
+
+            return await this.errorService.send(Interaction);
+        }
+    }
+
+    async tutorials(Interaction)
+    {
+        this.tutorialsCurrentEmbed = 1;
+        this.tutorialsCurrentArray = 0;
+        this.tutorialsCurrentArrayItem = 1;
+        this.userTutorials = [ [], [], [], [], [], [], [], [], [], [] ];
+
+        try
+        {
+            this.tutorialsLastEmbed = Math.ceil(this.response.data.user.tutorials.length / this.tutorialsPerEmbed);
 
             if (this.tutorialsLastEmbed === 0)
             {
                 this.tutorialsLastEmbed = 1;
             }
 
-            for (const Tag of this.response.data.user.tags)
-            {
-                this.userTags.push(Tag)
-            }
-
-            for (const Tutorial of this.response.data.tutorials)
+            for (const Tutorial of this.response.data.user.tutorials)
             {
                 if (this.tutorialsCurrentArrayItem <= ((this.tutorialsCurrentArray + 1) * this.tutorialsPerEmbed))
                 {
@@ -85,13 +94,13 @@ class RandomService
                             .setStyle('LINK'),
 
                         new MessageButton()
-                            .setCustomId('PAGE_TUTORIALS')
+                            .setCustomId(Interaction.id + '_PAGE_USER_TUTORIALS')
                             .setLabel('Tutorials')
                             .setEmoji('<:TutorialIcon:939152819523567636>')
                             .setStyle('DANGER'),
 
                         new MessageButton()
-                            .setCustomId('PAGE_USER_REFRESH')
+                            .setCustomId(Interaction.id + '_PAGE_USER_REFRESH')
                             .setLabel('Refresh')
                             .setEmoji('<:RepeatIcon:941290998171045928>')
                             .setStyle('DANGER')
@@ -107,7 +116,7 @@ class RandomService
                     .setDescription(
                         `> ${this.response.data.user.description}` +
                         '\n\n**<:HashIcon:940924838338523176> Tags:**' +
-                        '```' + (this.userTags.join(' - ') || '') + '```'
+                        '```' + (this.response.data.user.tags.join(' - ') || '') + '```'
                     )
                     .addFields(
                         {
@@ -117,17 +126,17 @@ class RandomService
                         },
                         {
                             name: '**<:PeopleIcon:940921189436641300> Followers:**',
-                            value: '```' + (this.response.data.followers.length || 0) + '```',
+                            value: '```' + (this.response.data.user.followers || 0) + '```',
                             inline: true
                         },
                         {
                             name: '**<:PeopleIcon:940921189436641300> Followings:**',
-                            value: '```' + (this.response.data.followings.length || 0) + '```',
+                            value: '```' + (this.response.data.user.following || 0) + '```',
                             inline: true
                         },
                         {
                             name: '**<:BookIcon:940923075027939358> Tutorials:**',
-                            value: '```' + (this.response.data.tutorials.length || 0) + '```',
+                            value: '```' + (this.response.data.user.tutorials.length || 0) + '```',
                             inline: true
                         },
                         {
@@ -157,14 +166,14 @@ class RandomService
                             .setStyle('LINK'),
 
                         new MessageButton()
-                            .setCustomId('PAGE_PROFILE')
+                            .setCustomId(Interaction.id + '_PAGE_USER_PROFILE')
                             .setLabel('Profile')
                             .setEmoji('<:TutorialIcon:939152819523567636>')
                             .setStyle('DANGER'),
 
                         new MessageButton()
                             .setLabel('Refresh')
-                            .setCustomId('PAGE_USER_REFRESH')
+                            .setCustomId(Interaction.id + '_PAGE_USER_REFRESH')
                             .setEmoji('<:RepeatIcon:941290998171045928>')
                             .setStyle('DANGER')
                     );
@@ -172,12 +181,12 @@ class RandomService
                 this.userTutorialsControllerRow = new MessageActionRow()
                     .addComponents(
                         new MessageButton()
-                            .setCustomId('PREVIOUS_PAGE_TUTORIALS')
+                            .setCustomId(Interaction.id + '_PREVIOUS_PAGE_USER_TUTORIALS')
                             .setEmoji('<:Left:849352126881857538>')
                             .setStyle('DANGER'),
 
                         new MessageButton()
-                            .setCustomId('NEXT_PAGE_TUTORIALS')
+                            .setCustomId(Interaction.id + '_NEXT_PAGE_USER_TUTORIALS')
                             .setEmoji('<:Right:849352129381531668>')
                             .setStyle('DANGER')
                     );
@@ -225,25 +234,37 @@ class RandomService
             {
                 switch (Event.customId)
                 {
-                    case 'PAGE_USER_REFRESH':
+                    case Interaction.id + '_PAGE_USER_REFRESH':
                     {
                         switch (this.currentEmbed)
                         {
-                            case 'PAGE_PROFILE':
+                            case 'PAGE_USER_PROFILE':
                             {
                                 await this.data(Interaction);
+                                await this.tutorials(Interaction);
                                 await this.structure(Interaction);
 
                                 await Event.update({ embeds: [ this.userProfileEmbed ], components: [ this.userProfileRow ] });
 
                                 break;
                             }
-                            case 'PAGE_TUTORIALS':
+                            case 'PAGE_USER_TUTORIALS':
                             {
                                 await this.data(Interaction);
+                                await this.tutorials(Interaction);
                                 await this.structure(Interaction);
 
                                 await Event.update({ embeds: [ this.userTutorialsEmbed ], components: [ this.userTutorialsControllerRow, this.userTutorialsRow ] });
+
+                                break;
+                            }
+                            default:
+                            {
+                                await this.data(Interaction);
+                                await this.tutorials(Interaction);
+                                await this.structure(Interaction);
+
+                                await Event.update({ embeds: [ this.userProfileEmbed ], components: [ this.userProfileRow ] });
 
                                 break;
                             }
@@ -251,25 +272,25 @@ class RandomService
 
                         break;
                     }
-                    case 'PAGE_PROFILE':
+                    case Interaction.id + '_PAGE_USER_PROFILE':
                     {
-                        this.currentEmbed = 'PAGE_PROFILE';
+                        this.currentEmbed = 'PAGE_USER_PROFILE';
 
                         await Event.update({ embeds: [ this.userProfileEmbed ], components: [ this.userProfileRow ] });
 
                         break;
                     }
-                    case 'PAGE_TUTORIALS':
+                    case Interaction.id + '_PAGE_USER_TUTORIALS':
                     {
-                        this.currentEmbed = 'PAGE_TUTORIALS';
+                        this.currentEmbed = 'PAGE_USER_TUTORIALS';
 
                         await Event.update({ embeds: [ this.userTutorialsEmbed ], components: [ this.userTutorialsControllerRow, this.userTutorialsRow ] });
 
                         break;
                     }
-                    case 'PREVIOUS_PAGE_TUTORIALS':
+                    case Interaction.id + '_PREVIOUS_PAGE_USER_TUTORIALS':
                     {
-                        this.currentEmbed = 'PAGE_TUTORIALS';
+                        this.currentEmbed = 'PAGE_USER_TUTORIALS';
 
                         if (this.tutorialsCurrentEmbed > 1)
                         {
@@ -286,9 +307,9 @@ class RandomService
 
                         break;
                     }
-                    case 'NEXT_PAGE_TUTORIALS':
+                    case Interaction.id + '_NEXT_PAGE_USER_TUTORIALS':
                     {
-                        this.currentEmbed = 'PAGE_TUTORIALS';
+                        this.currentEmbed = 'PAGE_USER_TUTORIALS';
 
                         if (this.tutorialsCurrentEmbed === this.tutorialsLastEmbed)
                         {
@@ -333,6 +354,7 @@ class RandomService
 
                     this.response = Data;
 
+                    await this.tutorials(Interaction);
                     await this.structure(Interaction);
                     await this.buttonCollector(Interaction);
 
@@ -347,6 +369,7 @@ class RandomService
 
                     this.response = Data;
 
+                    await this.tutorials(Interaction);
                     await this.structure(Interaction);
                     await this.buttonCollector(Interaction);
 
@@ -357,6 +380,7 @@ class RandomService
                     this.username = Interaction.options.getString('username').toLowerCase();
 
                     await this.data(Interaction);
+                    await this.tutorials(Interaction);
                     await this.structure(Interaction);
                     await this.buttonCollector(Interaction);
 

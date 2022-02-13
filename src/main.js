@@ -8,11 +8,12 @@ DotEnv.config({ path: Path.resolve('config', 'Config.env') });
 const Logger = require('./Service/Logger.Service');
 const ClientService = require('./Service/Client.Service');
 
-const Client = new ClientService();
+function Bootstrap()
+{
+    const Client = new ClientService();
 
-Logger.info('App is Running!');
-
-Client.run().then(() => {});
+    Client.start();
+}
 
 process.on('unhandledRejection', (Error) =>
 {
@@ -54,3 +55,5 @@ process.on('unhandledRejection', (Error) =>
         }
     );
 });
+
+Bootstrap();

@@ -16,7 +16,7 @@ class ErrorService
             .addComponents(
                 new MessageButton()
                     .setLabel('Help')
-                    .setCustomId('PAGE_HELP')
+                    .setCustomId(Interaction.id + 'PAGE_HELP')
                     .setEmoji('<:MotherboardWitheIcon:941210207458058271>')
                     .setStyle('DANGER')
             );
@@ -39,7 +39,7 @@ class ErrorService
 
         this.collector.on('collect', async (Event) =>
         {
-            if (Event.customId === 'PAGE_HELP')
+            if (Event.customId === (Interaction.id + 'PAGE_HELP'))
             {
                 await this.helpService.structure(Interaction, 'PAGE_ERROR', Event);
             }

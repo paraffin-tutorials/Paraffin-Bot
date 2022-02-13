@@ -8,38 +8,39 @@
         "dev": "nodemon",
         "lint": "eslint . --ext .js",
         "test": "jest",
-        "test:watch": "jest --watch"
+        "test:watch": "jest --watch",
+        "node-update": "npm i --save-dev node@16 && npm config set prefix=$(pwd)/node_modules/node && export PATH=$(pwd)/node_modules/node/bin:$PATH",
+        "node-clean": "rm -rf node_modules && rm package-lock.json && npm cache clear --force && npm cache clean --force && npm i",
+        "node-update-then-clean": "npm run node-update && npm run node-clean-cache"
     },
-    "author": {
-        "name": "im-parsa",
-        "email": "contact@parsa-firoozi.ir",
-        "url": "https://parsa-firoozi.ir"
-    },
+    "author": "",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/paraffin-tutorials-org/Paraffin-Bot.git"
     },
-    "author": "",
     "license": "ISC",
     "bugs": {
         "url": "https://github.com/paraffin-tutorials-org/Paraffin-Bot/issues"
     },
     "homepage": "https://github.com/paraffin-tutorials-org/Paraffin-Bot#readme",
     "dependencies": {
-        "axios": "^0.25.0",
         "@discordjs/builders": "^0.11.0",
         "@discordjs/rest": "^0.3.0",
         "@discordjs/voice": "^0.8.0",
+        "axios": "^0.25.0",
         "discord-api-types": "^0.26.1",
         "discord.js": "^13.6.0",
         "dotenv": "^14.3.2",
         "fs": "^0.0.1-security",
         "moment": "^2.29.1",
         "moment-duration-format": "^2.3.2",
-        "node": "^16.13.2",
         "node-fetch": "^2.6.7",
+        "nodemon": "^2.0.15",
         "pretty-ms": "^7.0.1",
         "screenshotmachine": "^2.0.0",
         "winston": "^3.4.0"
+    },
+    "devDependencies": {
+        "node": "^16.13.2"
     }
 }

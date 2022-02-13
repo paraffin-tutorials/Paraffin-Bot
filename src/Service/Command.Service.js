@@ -42,7 +42,7 @@ module.exports = (Client) =>
         {
             Logger.info(`Started refreshing application (/) commands.`);
 
-            await rest.put(Routes.applicationGuildCommands(ClientId, '908284384262639636'),
+            await rest.put(Routes.applicationCommands(ClientId),
                 {
                     body: Client.CommandArray,
                 });

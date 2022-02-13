@@ -44,7 +44,7 @@ module.exports = (Client) =>
 
             await rest.put(Routes.applicationCommands(ClientId),
                 {
-                    body: Client.CommandArray,
+                    body: Client.CommandArray
                 });
 
             Logger.info(`Successfully reloaded application (/) commands.`);

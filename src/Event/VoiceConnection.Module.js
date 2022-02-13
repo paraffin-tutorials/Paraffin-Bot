@@ -3,7 +3,7 @@ const VoiceDiscord = require('@discordjs/voice');
 
 module.exports =
     {
-        name: "ready",
+        name: 'ready',
         once: true,
 
         async execute(Args, Client)
@@ -21,6 +21,6 @@ module.exports =
 
             let Channel = Client.channels.cache.get(ChannelId);
 
-            Logger.info(`Bot is Joined in "${Channel.name}" Voice-Channel!`);
+            Logger.info(`Bot is Joined in '${Channel.name}' Voice-Channel!`);
         }
     };

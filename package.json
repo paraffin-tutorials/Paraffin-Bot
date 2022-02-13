@@ -2,9 +2,9 @@
     "name": "paraffin-bot",
     "version": "1.0.0",
     "description": "paraffin discord bot",
-    "main": "src/Main.js",
+    "main": "src/main.js",
     "scripts": {
-        "start": "node src/Main.js",
+        "start": "node src/main.js",
         "dev": "nodemon",
         "lint": "eslint . --ext .js,.ts",
         "test": "jest",
@@ -29,8 +29,10 @@
         "dotenv": "^14.3.2",
         "fs": "^0.0.1-security",
         "moment": "^2.29.1",
+        "moment-duration-format": "^2.3.2",
         "node": "^16.13.2",
         "node-fetch": "^2.6.7",
+        "pretty-ms": "^7.0.1",
         "screenshotmachine": "^2.0.0",
         "winston": "^3.4.0"
     },

@@ -14,5 +14,5 @@ exports.UpdateServersCount = (Client) =>
 
 exports.FormatDate = (Date) =>
 {
-    return Moment(Date).format("D MMM YYYY");
+    return Moment(Date).format('D MMM YYYY');
 };

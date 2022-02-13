@@ -44,10 +44,10 @@ module.exports =
                 .setFooter(
                     {
                         text: 'Paraffin Interaction-Handler System',
-                        iconURL: 'https://paraffin-tutorials.ir/image/favicon.png'
+                        iconURL: process.env.FAVICON
                     })
                 .setTimestamp()
-                .setColor("#e92e2e");
+                .setColor('#e92e2e');
 
             Webhook.send({ embeds: [Embed] });
         }

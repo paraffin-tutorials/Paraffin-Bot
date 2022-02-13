@@ -1,6 +1,6 @@
 module.exports =
     {
-        name: "interactionCreate",
+        name: 'interactionCreate',
 
         async execute(Interaction, Client)
         {
@@ -16,6 +16,10 @@ module.exports =
 
                 try
                 {
+                    if (Command.defer)
+                    {
+                        await Interaction.deferReply();
+                    }
                     await Command.execute(Interaction, Client);
                 }
                 catch (Error)

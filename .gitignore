@@ -4,5 +4,5 @@ node_modules
 .setting
 
 # Config files
-*.env
+Config.env
 package-lock.json

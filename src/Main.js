@@ -1,25 +1,29 @@
 const Path = require('path');
-const Moment = require("moment");
+const Moment = require('moment');
 const DotEnv = require('dotenv');
-const Fetch = require("node-fetch");
+const Fetch = require('node-fetch');
 
 DotEnv.config({ path: Path.resolve('config', 'Config.env') });
 
 const Logger = require('./Service/Logger.Service');
-const Client = require('./Service/Client.Service');
+const ClientService = require('./Service/Client.Service');
+
+const Client = new ClientService();
 
 Logger.info('App is Running!');
 
-Client();
+Client.run().then(() => {});
 
-process.on('unhandledRejection', err =>
+process.on('unhandledRejection', (Error) =>
 {
+    Logger.error(Error);
+
     Fetch(process.env.ERROR_EVENT_WEBHOOK,
         {
-            method: "post",
+            method: 'post',
             headers:
                 {
-                    "Content-Type": "application/json"
+                    'Content-Type': 'application/json'
                 },
             body: JSON.stringify(
                 {
@@ -27,22 +31,22 @@ process.on('unhandledRejection', err =>
                         [
                             {
                                 color: '16756775',
-                                title: "⚠️ New Bot Error",
+                                title: '⚠️ New Bot Error',
                                 fields:
                                     [
                                         {
-                                            name: "📌 Type: ",
-                                            value: `\`\`\`${err.name + "".split("", 150).join("") || "N/A"}\`\`\``
+                                            name: '📌 Type: ',
+                                            value: `\`\`\`${Error.name + ''.split('',250).join() || 'N/A'}\`\`\``
                                         },
                                         {
-                                            name: "📃 Reason: ",
-                                            value: `\`\`\`${err.message + "".split("", 150).join("") || "N/A"}\`\`\``
+                                            name: '📃 Reason: ',
+                                            value: `\`\`\`${Error.message + ''.split('',500).join() || 'N/A'}\`\`\``
                                         }
                                     ],
                                 footer:
                                     {
-                                        text: `Paraffin error handler system • ${Moment().locale("en").format("MMMM Do YYYY, h:mm:ss a")}`,
-                                        icon_url: "https://paraffin-tutorials.ir/image/favicon.png"
+                                        text: `${process.env.EMBED_ERROR_COMMANDS_FOOTER} • ${Moment().locale('en').format('MMMM Do YYYY, h:mm:ss a')}`,
+                                        icon_url: process.env.FAVICON
                                     }
                             }
                         ]

@@ -1,4 +1,4 @@
-const {  MessageEmbed , WebhookClient } = require('discord.js');
+const {  MessageEmbed, WebhookClient } = require('discord.js');
 
 const { UpdateServersCount } = require('../Service/Helper.Service');
 
@@ -14,9 +14,9 @@ module.exports =
                 .setFooter(
                     {
                         name: 'Paraffin Guild-Event System',
-                        iconURL: 'https://paraffin-tutorials.ir/image/favicon.png'
+                        iconURL: process.env.FAVICON
                     })                .setTimestamp()
-                .setColor("#e92e2e");
+                .setColor('#e92e2e');
 
             const Webhook = new WebhookClient({ url: process.env.GUILD_EVENT_WEBHOOK });
 

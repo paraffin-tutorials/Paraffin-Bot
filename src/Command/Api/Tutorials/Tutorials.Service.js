@@ -1,0 +1,244 @@
+const axios = require('axios');
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+
+const Logger = require('../../../Service/Logger.Service');
+const ErrorService = require('../../../Service/Error.Service');
+const { FormatDate } = require('../../../Service/Helper.Service');
+
+class RandomService
+{
+    constructor()
+    {
+        this.currentEmbed = 1;
+        this.currentArray = 0;
+        this.error = false;
+        this.errorService = new ErrorService();
+    }
+
+    async optionsValidation(Interaction)
+    {
+        if (this.sort !== 'views' && this.sort !== 'likes' && this.sort !== 'comments' && this.sort !== 'createAt' && this.sort !== 'name')
+        {
+            this.error = true;
+
+            return this.errorService.send(Interaction, 'Bad Request', 'That type of your sorting request is not supported.');
+        }
+    }
+
+    async data(Interaction)
+    {
+        try
+        {
+            this.response = await axios.get(`https://api.paraffin-tutorials.ir/api/${process.env.API_VERSION}/tutorials?skip=${this.currentArray}&limit=1&sort=${this.sort}`);
+
+            if (this.response.data?.status !== 'success')
+            {
+                this.error = true;
+
+                Logger.error(this.response);
+
+                return this.errorService.send(Interaction, 'Internal Api Error');
+            }
+        }
+        catch (Error)
+        {
+            this.error = true;
+
+            Logger.error(Error);
+
+            return await this.errorService.send(Interaction);
+        }
+    }
+
+    async structure(Interaction)
+    {
+        try
+        {
+            if (!this.error)
+            {
+                this.tutorialControllerRow = new MessageActionRow()
+                    .addComponents(
+                        new MessageButton()
+                            .setCustomId('PREVIOUS_PAGE_TUTORIALS')
+                            .setEmoji('<:Left:849352126881857538>')
+                            .setStyle('DANGER'),
+
+                        new MessageButton()
+                            .setCustomId('NEXT_PAGE_TUTORIALS')
+                            .setEmoji('<:Right:849352129381531668>')
+                            .setStyle('DANGER')
+                    );
+
+                this.tutorialRow = new MessageActionRow()
+                    .addComponents(
+                        new MessageButton()
+                            .setLabel('More')
+                            .setEmoji('<:LinkIcon:939151538792824842>')
+                            .setURL('https://paraffin-tutorials.ir/tutorials/' + this.response.data.tutorials[0].name)
+                            .setStyle('LINK')
+                    );
+
+                this.tutorialEmbed = new MessageEmbed()
+                    .setColor(this.response.data.tutorials[0].author.baseColor)
+                    .setThumbnail(process.env.IMAGE_LINK + this.response.data.tutorials[0].author.profile)
+                    .setImage(process.env.IMAGE_LINK + this.response.data.tutorials[0].image)
+                    .setAuthor(
+                        {
+                            name: this.response.data.tutorials[0].name.toUpperCase() + ((this.response.data.tutorials[0].edited ? '' : 'ویرایش شده') || '')
+                        })
+                    .setDescription(
+                        `> **${this.response.data.tutorials[0].title}**` +
+                        '\n> ' +
+                        `\n> ${this.response.data.tutorials[0].description}`
+                    )
+                    .addFields(
+                        {
+                            name: '**<:PenIcon:940921189004640276> Author:**',
+                            value: '```' + this.response.data.tutorials[0].author.username + '```',
+                            inline: true
+                        },
+                        {
+                            name: '**<:HeartIcon:940919983024766986> Likes:**',
+                            value: '```' + (this.response.data.tutorials[0].likes || 0)  + '```',
+                            inline: true
+                        },
+                        {
+                            name: '**<:EyeIcon:940920543408955464> Views:**',
+                            value: '```' + (this.response.data.tutorials[0].views || 0) + '```',
+                            inline: true
+                        },
+                        {
+                            name: '**<:CommentIcon:940922931863764992> Comments:**',
+                            value: '```' + (this.response.data.tutorials[0].comments || 0) + '```',
+                            inline: true
+                        },
+                        {
+                            name: '**<:CpuIcon:940922798367440896> Hardship Level:**',
+                            value: '```' + (this.response.data.tutorials[0].hardshipLevel || 'آسان') + '```',
+                            inline: true
+                        },
+                        {
+                            name: '**<:CpuIcon:940922798367440896> Training Level:**',
+                            value: '```' + (this.response.data.tutorials[0].trainingLevel || 'مبتدی') + '```',
+                            inline: true
+                        },
+                        {
+                            name: '**<:CalenderIcon:940919983305801809> Created At:**',
+                            value: '```' + (FormatDate(this.response.data.tutorials[0].createdAt) || '1 Jan 1970') + '```',
+                            inline: true
+                        },
+                        {
+                            name: '**<:ReplyIcon:940919376121565235> Requested By:**',
+                            value: '```' + ((Interaction.user.username + '#' + Interaction.user.discriminator) || 'GOD') + '```',
+                            inline: true
+                        }
+                    )
+                    .setFooter(
+                        {
+                            text: process.env.EMBED_SERVICE_COMMANDS_FOOTER,
+                            iconURL: process.env.FAVICON
+                        })
+                    .setTimestamp();
+            }
+        }
+        catch (Error)
+        {
+            this.error = true;
+
+            Logger.error(Error);
+
+            return await this.errorService.send(Interaction);
+        }
+    }
+
+    async buttonCollector(Interaction)
+    {
+        try
+        {
+            this.collector = await Interaction.channel.createMessageComponentCollector({ componentType: 'BUTTON', time: 120000  });
+
+            this.collector.on('collect', async (Event) =>
+            {
+                switch (Event.customId)
+                {
+                    case 'PREVIOUS_PAGE_TUTORIALS':
+                    {
+                        if (this.currentEmbed > 1)
+                        {
+                            this.currentEmbed--;
+                            this.currentArray--;
+                        }
+                        else
+                        {
+                            this.currentEmbed = this.response.data.tutorialsCount;
+                            this.currentArray = this.response.data.tutorialsCount - 1;
+                        }
+
+                        await this.data(Interaction);
+                        await this.structure(Interaction);
+
+                        await Event.update({ embeds: [ this.tutorialEmbed ], components: [ this.tutorialControllerRow, this.tutorialRow ] });
+
+                        break;
+                    }
+                    case 'NEXT_PAGE_TUTORIALS':
+                    {
+                        if (this.currentEmbed === this.response.data.tutorialsCount)
+                        {
+                            this.currentEmbed = 1;
+                            this.currentArray = 0;
+                        }
+                        else
+                        {
+                            this.currentEmbed++;
+                            this.currentArray++;
+                        }
+
+                        await this.data(Interaction);
+                        await this.structure(Interaction);
+
+                        await Event.update({ embeds: [ this.tutorialEmbed ], components: [ this.tutorialControllerRow, this.tutorialRow ] });
+
+                        break;
+                    }
+                }
+            });
+        }
+        catch (Error)
+        {
+            this.error = true;
+
+            Logger.error(Error);
+
+            return await this.errorService.send(Interaction);
+        }
+    }
+
+    async send(Interaction)
+    {
+        try
+        {
+            this.sort = await Interaction.options.getString('sort') || 'views';
+
+            await this.optionsValidation(Interaction);
+            await this.data(Interaction);
+            await this.structure(Interaction)
+            await this.buttonCollector(Interaction);
+
+            if (!this.error)
+            {
+                return await Interaction.editReply({ embeds: [ this.tutorialEmbed ], components: [ this.tutorialControllerRow, this.tutorialRow ] });
+            }
+        }
+        catch (Error)
+        {
+            this.error = true;
+
+            Logger.error(Error);
+
+            return await this.errorService.send(Interaction);
+        }
+    }
+}
+
+module.exports = RandomService;

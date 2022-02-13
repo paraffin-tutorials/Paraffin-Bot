@@ -124,7 +124,7 @@ class InfoService
 
             if (!this.error)
             {
-                return Interaction.reply({ embeds: [ this.embed ], components :[ this.row ]});
+                return Interaction.editReply({ embeds: [ this.embed ], components :[ this.row ]});
             }
         }
         catch (Error)

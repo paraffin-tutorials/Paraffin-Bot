@@ -1,0 +1,25 @@
+{
+    "compilerOptions":
+    {
+        "module": "CommonJS",
+        "strict": true,
+        "strictNullChecks": false,
+        "baseUrl": "./",
+        "outDir": "./build",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "experimentalDecorators": true,
+        "target": "ES2020",
+        "emitDecoratorMetadata": true,
+        "moduleResolution": "node",
+        "importHelpers": true,
+        "types": ["jest", "node"],
+        "typeRoots": ["node_modules/@types"],
+        "allowSyntheticDefaultImports": true,
+        "incremental": true,
+        "skipLibCheck": true
+    },
+    "include": ["./src/**/*.ts"],
+    "exclude": ["config", "node_modules"]
+}

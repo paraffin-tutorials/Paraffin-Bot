@@ -2,13 +2,15 @@
     "name": "paraffin-bot",
     "version": "1.0.0",
     "description": "paraffin discord bot",
-    "main": "src/main.js",
+    "main": "src/main.ts",
     "scripts": {
-        "start": "node src/main.js",
+        "build": "tsc",
+        "start": "ts-node build/server.js",
         "dev": "nodemon",
-        "lint": "eslint . --ext .js",
+        "lint": "eslint . --ext .js,.ts",
         "test": "jest",
         "test:watch": "jest --watch",
+        "cluster": "pm2 start build/main.js -i max",
         "node-update": "npm i --save-dev node@16 && npm config set prefix=$(pwd)/node_modules/node && export PATH=$(pwd)/node_modules/node/bin:$PATH",
         "node-clean": "rm -rf node_modules && rm package-lock.json && npm cache clear --force && npm cache clean --force && npm i",
         "node-update-then-clean": "npm run node-update && npm run node-clean-cache"

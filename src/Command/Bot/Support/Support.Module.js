@@ -6,7 +6,7 @@ module.exports =
     {
         data: new SlashCommandBuilder()
             .setName('support')
-            .setDescription('Paraffin Tutorials Support discord server!'),
+            .setDescription('Paraffin Tutorials support discord server!'),
 
         service: new SupportService(),
 

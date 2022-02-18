@@ -6,7 +6,7 @@ module.exports =
     {
         data: new SlashCommandBuilder()
             .setName('help')
-            .setDescription('Paraffin Tutorials Bot Help Menu!'),
+            .setDescription('Paraffin Tutorials Bot help menu!'),
 
         service: new HelpService(),
 

@@ -6,7 +6,7 @@ module.exports =
     {
         data: new SlashCommandBuilder()
             .setName('bot-stats')
-            .setDescription('Paraffin Tutorials discord-not Information & Status!'),
+            .setDescription('Paraffin Tutorials discord bot Information & Status!'),
 
         service: new StatsService(),
 

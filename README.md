@@ -43,7 +43,7 @@
 - Pagination
 - Slash-Command Handler
 - Auto-Register Slash Commands
-- 
+
 <br/>
 
 ## 🤝 Contributing

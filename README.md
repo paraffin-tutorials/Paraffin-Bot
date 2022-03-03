@@ -64,7 +64,7 @@ If you want to say thank you and/or support active development of the Paraffin T
 - Join our discord server [paraffin](https://discord.com/invite/RUrks4JqW6).
 - Follow our team profiles [im-parsa](https://github.com/im-parsa) & [hesam](https://github.com/hesawmgh1098)
 
-Thanks so much for your interest in growing the reach of the Nava app!
+Thanks so much for your interest in growing the reach of the Paraffin Tutorials discord-bot!
 
 <br/>
 

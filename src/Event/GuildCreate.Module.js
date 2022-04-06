@@ -9,7 +9,7 @@ module.exports =
         execute(Guild, Client)
         {
             const Embed = new MessageEmbed()
-                .setTitle(`New Server Added`)
+                .setTitle('New Server Added')
                 .setDescription(`**Server Name:** ${Guild.name} \n**Server ID:** ${Guild.id} \n**Members Count:** ${Guild.memberCount} `)
                 .setFooter(
                     {

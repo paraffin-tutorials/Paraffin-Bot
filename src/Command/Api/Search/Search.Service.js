@@ -5,7 +5,7 @@ const ErrorService = require('../../../Service/Error.Service');
 const UsersService = require('../Users/Users.Service');
 const TutorialsService = require('../Tutorials/Tutorials.Service');
 
-class RandomService
+class SearchService
 {
     constructor()
     {
@@ -86,4 +86,4 @@ class RandomService
     }
 }
 
-module.exports = RandomService;
+module.exports = SearchService;

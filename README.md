@@ -27,7 +27,6 @@
 
 <p align="left">
     <img src="https://img.shields.io/github/release/paraffin-tutorials-org/Paraffin-Bot.svg" alt="release">
-    <img src="https://img.shields.io/github/downloads/paraffin-tutorials-org/Paraffin-Bot/total.svg" alt="downloads">
     <img src="https://img.shields.io/github/forks/paraffin-tutorials-org/Paraffin-Bot.svg" alt="forks">
     <img src="https://img.shields.io/github/stars/paraffin-tutorials-org/Paraffin-Bot.svg" alt="stars">
     <img src="https://img.shields.io/github/watchers/paraffin-tutorials-org/Paraffin-Bot.svg" alt="watchers">

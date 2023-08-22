@@ -1,5 +1,5 @@
 <h1 align="center">
-    <img src="https://paraffin-tutorials.ir/image/favicon.png" width="224px" alt="Nava Video Player"/>
+    <img src="https://paraffin-tutorials.ir/image/favicon.png" width="224px" alt="Paraffin Bot"/>
     <br/>
     Paraffin Tutorials Discord-Bot
 </h1>
